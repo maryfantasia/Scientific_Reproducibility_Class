@@ -3,14 +3,17 @@ title: "Coding Challenge 4"
 author: "Mary Fantasia"
 date: "2026-02-19"
 output: 
-  md_document:
-    variant: gfm
   html_document: 
    toc: true  
    toc_float: true  
+  md_document:
+    variant: gfm
   pdf_document: 
   word_document:  
 ---
+here is a link to my github repository for this challenge
+
+[github](https://github.com/maryfantasia/Scientific_Reproducibility_Class/tree/main/Coding_chalenge_4)
 
 # Question 1
 
