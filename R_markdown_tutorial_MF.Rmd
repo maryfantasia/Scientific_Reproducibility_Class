@@ -1,0 +1,61 @@
+---
+title: "Rmarkdown_tutorial_MF"
+author: "Mary Fantasia"
+date: "2026-02-19"
+output: 
+  md_document:
+    variant: gfm
+  html_document: #create a document
+   toc: true  #add table of contents
+   toc_float: true  #cool table of contents
+  pdf_document:   #can make multiple documents
+  word_document:  #different types of documents
+---
+
+```{r R code example}
+## r code chunk
+#include=FALSE to not include
+summary(mtcars)
+```
+
+```{r figures}
+library(tidyverse)
+data("mtcars")
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point()
+```
+
+R markdown formatting options
+# first level header
+
+## second level header
+
+### third level header
+
+#### style and emphasis
+*italics text*
+**bold text**
+
+1. first one
+2. second one 
+  - subitem
+ 
+##Links
+
+[Link to my gitbub](https://github.com/maryfantasia/Scientific_Reproducibility_Class)
+
+
+##Images
+![Image](relative file path to image)
+
+
+##Tables
+```{r}
+library(knitr)
+kable(mtcars, digits = 3, format = "markdown")
+```
+
+
+ 
+
+
