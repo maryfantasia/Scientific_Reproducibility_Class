@@ -1,0 +1,140 @@
+---
+title: "Coding Challenge 4"
+author: "Mary Fantasia"
+date: "2026-02-19"
+output: 
+  md_document:
+    variant: gfm
+  html_document: 
+   toc: true  
+   toc_float: true  
+  pdf_document: 
+  word_document:  
+---
+
+# Question 1
+
+### A YAMIL header displays the title of the Rmarkdown, the author of the document, the date it was last edited, and the output documents it will create.
+
+the YAMIL header for the document looks like:
+```{r eval=FALSE}
+---
+title: "Coding Challenge 4"
+author: "Mary Fantasia"
+date: "2026-02-19"
+output: 
+  md_document:
+    variant: gfm
+  html_document:
+    toc: true
+---
+```
+
+### Literate programming is a key player in reproducible code. 
+
+includes annotating code, using programming settings to make the document easy to read
+
+# Question 2
+
+### Adding code to the document is easy, just add a code chunk
+
+[Link to data](Noel, Z.A., Roze, L.V., Breunig, M., Trail, F. 2022. Endophytic fungi as promising biocontrol agent to protect wheat from Fusarium graminearum head blight. Plant Disease. https://doi.org/10.1094/PDIS-06-21-1253-RE)
+
+### Code chunk 1
+
+```{r Load packages and read data}
+library (tidyverse)
+library (ggplot2)
+library(ggpubr)
+library(ggrepel)
+
+don.concentration <- read.csv("MycotoxinData.csv", na.strings="na")
+```
+
+### Code chunk 2
+
+```{r Plot DON data}
+don.treatment <- ggplot(don.concentration, aes(x = Treatment, y = DON, color = Cultivar, fill = Cultivar)) +
+  geom_boxplot() +
+  xlab("") +
+  ylab ("DON (ppm)") +
+  geom_point(position = position_jitterdodge()) +  
+  geom_point(shape = 21, alpha = 0.6) +
+  scale_fill_manual(values = c("#CC79A7", "#009E73")) +
+  scale_color_manual(values = c("#000000", "#000000")) +
+  facet_wrap(~Cultivar, scales = "free")  
+don.treatment
+
+don.concentration$Treatment <- as.factor(don.concentration$Treatment)
+don.concentration$Treatment <- factor(don.concentration$Treatment, levels = c("NTC", "Fg", "Fg + 37", "Fg + 40", "Fg + 70"))
+```
+
+### Code chunk 3
+
+```{r Plot 15ADON data}
+x15adon.effect <- ggplot(don.concentration, aes(x = Treatment, y = X15ADON, color = Cultivar, fill = Cultivar)) +
+  geom_boxplot() +
+  xlab("") +
+  ylab ("15ADON") +
+  geom_point(position = position_jitterdodge()) +  
+  geom_point(shape = 21, alpha = 0.6) +
+  scale_fill_manual(values = c("#CC79A7", "#009E73")) +
+  scale_color_manual(values = c("#000000", "#000000")) +
+  facet_wrap(~Cultivar, scales = "free") 
+x15adon.effect
+```
+
+### Code chunk 4
+
+```{r Plot seed mass data}
+seed.mass.effect <- ggplot(don.concentration, aes(x = Treatment, y = MassperSeed_mg, color = Cultivar, fill = Cultivar)) +
+  geom_boxplot() +
+  xlab("") +
+  ylab ("Seed Mass (mg)") +
+  geom_point(position = position_jitterdodge()) +  
+  geom_point(shape = 21, alpha = 0.6) +
+  scale_fill_manual(values = c("#CC79A7", "#009E73")) +
+  scale_color_manual(values = c("#000000", "#000000")) +
+  facet_wrap(~Cultivar, scales = "free") 
+seed.mass.effect
+```
+
+### Code chunk 5
+
+```{r Add t-test to all data}
+# figure 1a
+don.t.test <- don.treatment +
+  geom_pwc(aes(group = Treatment), method = "t_test", label = "p.adj.format")
+don.t.test
+
+# figure 1b
+x15adon.t.test <- x15adon.effect +
+  geom_pwc(aes(group = Treatment), method = "t_test", label = "p.adj.format")
+x15adon.t.test
+
+# figure 1c
+seed.mass.t.test <- seed.mass.effect +
+  geom_pwc(aes(group = Treatment), method = "t_test", label = "p.adj.format")
+seed.mass.t.test
+```
+
+### Code chunk 6
+
+```{r Combining all plots into one}
+figure1 <- ggarrange(
+  don.t.test,
+  x15adon.t.test,
+  seed.mass.t.test,
+  labels = "auto",
+  nrow = 1, 
+  ncol = 3,  
+  common.legend = T
+)
+
+figure1
+```
+
+
+
+
+
