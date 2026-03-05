@@ -9,6 +9,7 @@ Contains assignments for Dr. Noel's Scientific Reproducibilty Class at Auburn Un
 
 # File Tree
 
+'''
 .
 ├── BacterialAlpha.csv
 ├── Bull_richness.csv
@@ -16,21 +17,38 @@ Contains assignments for Dr. Noel's Scientific Reproducibilty Class at Auburn Un
 │   ├── Coding_challenge_4.html
 │   ├── Coding_challenge_4.md
 │   ├── Coding_challenge_4.Rmd
-│   └── Coding_challenge_4_files
-│       └── figure-gfm
-│           ├── Add t-test to all data-1.png
-│           ├── Add t-test to all data-2.png
-│           ├── Add t-test to all data-3.png
-│           ├── Combining all plots into one-1.png
-│           ├── Plot 15ADON data-1.png
-│           ├── Plot DON data-1.png
-│           └── Plot seed mass data-1.png
+│   ├── Coding_challenge_4_files
+│   │   └── figure-gfm
+│   │       ├── Add t-test to all data-1.png
+│   │       ├── Add t-test to all data-2.png
+│   │       ├── Add t-test to all data-3.png
+│   │       ├── Combining all plots into one-1.png
+│   │       ├── Plot 15ADON data-1.png
+│   │       ├── Plot DON data-1.png
+│   │       └── Plot seed mass data-1.png
+│   └── MycotoxinData.csv
 ├── coding_challenge_1.R
 ├── coding_challenge_2.R
 ├── coding_challenge_3.R
 ├── coding_practice_1.R
 ├── coding_practice_2.R
 ├── coding_practice_3.R
+├── Coding_practice_5
+│   ├── Bull_richness.csv
+│   ├── coding_practice_5.html
+│   ├── coding_practice_5.Rmd
+│   └── coding_practice_5_files
+│       └── figure-gfm
+│           ├── Group of functions work together nicely creating a nice plot-1.png
+│           └── Plot!-1.png
+├── coding_practice_5.md
+├── coding_practice_5.Rmd
+├── coding_practice_5_files
+│   └── figure-gfm
+│       ├── Group of functions work together nicely creating a nice plot-1.png
+│       └── Plot!-1.png
+├── DataWrangling.pdf
+├── DataWrangling.Rmd
 ├── diff_abund.csv
 ├── LICENSE
 ├── MycotoxinData.csv
@@ -44,3 +62,4 @@ Contains assignments for Dr. Noel's Scientific Reproducibilty Class at Auburn Un
 │       ├── figures-1.png
 │       └── pressure-1.png
 └── Scientific_Reproducibility_Class.Rproj
+'''
