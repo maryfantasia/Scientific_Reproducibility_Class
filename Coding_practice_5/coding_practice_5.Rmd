@@ -3,91 +3,80 @@ title: "Coding Practice 5"
 author: "Mary Fantasia"
 date: "2026-03-05"
 output: 
+  md_document:
+    variant: gfm
   html_document: 
    toc: true  
    toc_float: true  
-  md_document:
-    variant: gfm
 ---
 
-#Data Wrangling
-##First step, install R package, "tidyverse" then load the package
+# Data Wrangling!
+## First step, install R package, "tidyverse" then load the package
 
-```{r}
-install.packages("tidyverse")
-
+```{r Tidyverse}
+# Install if you dont already have it
 library(tidyverse)
 ```
 
 Loading this package will also load all of the listed packages above, so you do not have to load them individually.
 
-##Next, check out these functions:
+## Next, check out these functions:
 
-```{r}
-# Data wrangling & manipulation
-
-mutate()
-select()
-filter()
-the pipe %>%
-summarise()
-group_by()
-joining
-pivotting
-Integration with plotting
+```{r Data wrangling & manipulation}
+# mutate()
+# select()
+# filter()
+# the pipe %>%
+# summarise()
+# group_by()
+# joining
+# pivotting
+# Integration with plotting
 
 ```
 
-##Tutorial
+## Tutorial
 
-```{r}
-# Load data
+```{r Load data}
 microbiome.fungi <- read.csv("Bull_richness.csv")
 str(microbiome.fungi)
 ```
 Here is our data above.
 
-###select()
-```{r}
-# Selecting only certain parts of outr data
+### select()
+```{r Selecting only certain parts of outr data}
 microbiome.fungi2 <- select(microbiome.fungi, SampleID, Crop, Compartment:Fungicide, richness)
 ```
 
-###filter()
-```{r}
-# Subset data
+### filter()
+```{r Subset data}
 head(filter(microbiome.fungi2, Treatment == "Conv."))
 ```
 Above shows our subsetted data.
 
-```{r}
-# To be more complex using &
+```{r To be more complex using &}
 head(filter(microbiome.fungi2, Treatment == "Conv." & Fungicide == "C"))
 ```
 Above shows our complex way or subsetting data
 
-```{r}
-# To be more cmplex using or, |
+```{r To be more cmplex using or, |}
 head(filter(microbiome.fungi2, Sample == "A" | Sample == "B")) # samples A or B
 ```
 Above shows our more complex way of subsetting data.
 
-###mutate()
-```{r}
-# Create a new column called logRich
+### mutate()
+```{r Create a new column called logRich}
 head(mutate(microbiome.fungi2, logRich = log(richness)))
 ```
 Here is our data with the new column added.
 
-```{r}
-# Creating a new column which combines Crop and Treatment 
+```{r Creating a new column which combines Crop and Treatment}
 head(mutate(microbiome.fungi2, Crop_Treatment = paste(Crop, Treatment)))
 ```
 Here is our data with the new column that combines data
 
-###%>%
-```{r}
-# The pipe
+### %>%
+```{r The pipe}
 microbiome.fungi %>%
   select(SampleID, Crop, Compartment:Fungicide, richness) %>% # selecting columns
   filter(Treatment == "Conv.") %>% # subsetting to only include the conventional treatment
@@ -96,9 +85,8 @@ microbiome.fungi %>%
 ```
 Here we do not have to specify functions, previous step to next step.
 
-###summarise()
-```{r}
-# Find things like means, standard deviation, errors
+### summarise()
+```{r Find things like means, standard deviation, errors}
 microbiome.fungi %>%
   select(SampleID, Crop, Compartment:Fungicide, richness) %>% # selecting columns
   filter(Treatment == "Conv.") %>% # subsetting to only include the conventional treatment
@@ -107,8 +95,7 @@ microbiome.fungi %>%
 ```
 Here is the mean of this data.
 
-```{r}
-# Connect multiple summary stats
+```{r Connect multiple summary stats}
 microbiome.fungi %>%
   select(SampleID, Crop, Compartment:Fungicide, richness) %>% # selecting columns
   filter(Treatment == "Conv.") %>% # subsetting to only include the conventional treatment
@@ -120,9 +107,8 @@ microbiome.fungi %>%
 ```
 Here we found mean, standard deviation, and standard error.
 
-###group_by()
-```{r}
-# Get summary statistics by group
+### group_by()
+```{r Get summary statistics by group}
 microbiome.fungi %>%
   select(SampleID, Crop, Compartment:Fungicide, richness) %>% # selecting columns
   group_by(Treatment, Fungicide) %>% # grouping by treatment and fungicide to later calculate summary stats by group
@@ -134,9 +120,8 @@ microbiome.fungi %>%
 ```
 Here we have statistics by group.
 
-###Connecting to plotting
-```{r}
-# Group of functions work together nicely creating a nice plot
+### Connecting to plotting
+```{r Group of functions work together nicely creating a nice plot}
 microbiome.fungi %>%
   select(SampleID, Crop, Compartment:Fungicide, richness) %>% # selecting columns
   group_by(Treatment, Fungicide) %>% # grouping by treatment and fungicide to later calculate summary stats by group
@@ -155,9 +140,8 @@ microbiome.fungi %>%
 ```
 Here is our plot!
 
-###Joining
-```{r}
-# selecting just the richness and sample ID
+### Joining
+```{r selecting just the richness and sample ID}
 richness <- microbiome.fungi %>%
   select(SampleID, richness)
 
@@ -174,14 +158,14 @@ head(richness)
 ```
 Here are rows based on richness.
 
-```{r}
+```{r Joining more data}
 # adding the richness data to the metadata based on on the common column of sampleID
 head(left_join(metadata, richness, by = "SampleID")) 
 ```
 More joining based on certain criteria.
 
-###pivot_wider()
-```{r}
+### pivot_wider()
+```{r Prep data}
 # Pivoting to convert from wide to long format and back again
 microbiome.fungi %>%
   select(SampleID, Crop, Compartment:Fungicide, richness) %>% # selecting columns  filter(Class == "Sordariomycetes") %>%
@@ -190,8 +174,7 @@ microbiome.fungi %>%
 ```
 Here we have our data ready to pivot.
 
-```{r}
-# Pivoting data
+```{r Pivot data}
 microbiome.fungi %>%
   select(SampleID, Crop, Compartment:Fungicide, richness) %>% # selecting columns  filter(Class == "Sordariomycetes") %>%
   group_by(Treatment, Fungicide) %>% # grouping by treatment and fungicide to later calculate summary stats by group
@@ -200,7 +183,7 @@ microbiome.fungi %>%
 ```
 Here is our pivoted data.
 
-```{r}
+```{r Working with pivoted data}
 #Taking the difference between the fungicide and control
 microbiome.fungi %>%
   select(SampleID, Crop, Compartment:Fungicide, richness) %>% # selecting columns  filter(Class == "Sordariomycetes") %>%
@@ -211,7 +194,7 @@ microbiome.fungi %>%
 ```
 Here is our data ready to plot.
 
-```{r}
+```{r Plot!}
 # Plot difference
 microbiome.fungi %>%
   select(SampleID, Crop, Compartment:Fungicide, richness) %>% # selecting columns  
