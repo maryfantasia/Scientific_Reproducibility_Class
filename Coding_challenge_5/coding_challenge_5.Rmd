@@ -1,0 +1,128 @@
+---
+title: "Coding Challenge 5"
+author: "Mary Fantasia"
+date: "2026-03-12"
+output: 
+  html_document: 
+   toc: true  
+   toc_float: true  
+  md_document:
+    variant: gfm
+---
+
+# Question 1
+Download two .csv files from Canvas called DiversityData.csv and Metadata.csv, and read
+them into R using relative file paths.
+```{r Read files using relative file paths}
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+DiversityData <- read.csv("DiversityData.csv")
+str(DiversityData)
+Metadata <- read.csv("Metadata.csv")
+str(Metadata)
+```
+
+# Question 2
+Join the two dataframes together by the common column ‘Code’. Name the resulting dataframe
+alpha.
+```{r Join two dataframes}
+alpha <- DiversityData %>%
+  left_join(Metadata, by = "Code")
+```
+
+# Question 3
+## Calculate Pielou’s evenness index: Pielou’s evenness is an ecological parameter calculated by the Shannon diversity index (column Shannon) divided by the log of the richness column.
+A. Using mutate, create a new column to calculate Pielou’s evenness index.
+B. Name the resulting dataframe alpha_even.
+```{r Creating a new column}
+head(mutate(alpha, alpha_even = log(richness)))
+```
+# Question 4
+## Using tidyverse language of functions and the pipe, use the summarise function and tell me the mean and standard error evenness grouped by crop over time.
+A. Start with the alpha_even dataframe
+B. Group the data: group the data by Crop and Time_Point.
+C. Summarize the data: Calculate the mean, count, standard deviation, and standard error for the even variable within each group.
+D. Name the resulting dataframe alpha_average
+```{r Finding mean and standard error evenness}
+alpha_average <- alpha %>%                              # THIS CODE WAS WRITTEN WITH HELP FROM COPILOT.
+  select(Code, Crop, Time_Point, richness) %>%          # select just what you need
+  mutate(alpha_even = log(richness)) %>%                # create the log-evenness column
+  group_by(Crop, Time_Point) %>%                        # group by crop over time
+  summarise(
+    n         = sum(!is.na(alpha_even)),                # count of non-missing values
+    mean_even = mean(alpha_even, na.rm = TRUE),         # mean
+    sd_even   = sd(alpha_even, na.rm = TRUE),           # standard deviation
+    se_even   = sd_even / sqrt(n),                      # standard error
+    .groups   = "drop"
+  )
+alpha_average
+```
+
+# Question 5
+## Calculate the difference between the soybean column, the soil column, and the difference between the cotton column and the soil column
+A. Start with the alpha_average dataframe
+B. Select relevant columns: select the columns Time_Point, Crop, and mean.even.
+C. Reshape the data: Use the pivot_wider function to transform the data from long to wide
+format, creating new columns for each Crop with values from mean.even.
+D. Calculate differences: Create new columns named diff.cotton.even and diff.soybean.even
+by calculating the difference between Soil and Cotton, and Soil and Soybean,
+respectively.
+E. Name the resulting dataframe alpha_average2
+```{r Calculating differences}
+alpha_average2 <- alpha_average %>% #THIS CODE WAS WRItTEN WITH HELP FROM COPILOT.
+  # B) Select relevant columns (supports either mean_even or mean.even)
+  select(Time_Point, Crop, any_of(c("mean_even", "mean.even"))) %>%
+  # Standardize the mean column name to mean_even for the rest of the pipeline
+  rename(mean_even = any_of(c("mean_even", "mean.even"))) %>%
+  # C) Go from long (one row per Crop) to wide (one column per Crop)
+  pivot_wider(
+    names_from  = Crop,
+    values_from = mean_even
+  ) %>%
+  # D) Compute differences (Soil − Cotton, Soil − Soybean)
+  mutate(
+    diff.cotton.even  = Soil - Cotton,
+    diff.soybean.even = Soil - Soybean
+  )
+alpha_average2
+```
+# Question 6
+## Connecting it to plots
+A. Start with the alpha_average2 dataframe
+B. Select relevant columns: select the columns Time_Point, diff.cotton.even, and
+diff.soybean.even.
+C. Reshape the data: Use the pivot_longer function to transform the data from wide to long
+format, creating a new column named diff that contains the values from diff.cotton.even
+and diff.soybean.even.
+D. Create the plot: Use ggplot and geom_line() with ‘Time_Point’ on the x-axis, the column
+‘values’ on the y-axis, and different colors for each ‘diff’ category. The column named
+‘values’ come from the pivot_longer.
+```{r Plotting the data}
+# THIS CODE WAS WRITTEN WITH HELP FROM COPILOT
+plot_data <- alpha_average2 %>%
+  select(Time_Point, diff.cotton.even, diff.soybean.even) %>%
+  pivot_longer(c(diff.cotton.even, diff.soybean.even),names_to = "diff", values_to ="values") %>%
+  mutate(Time_Point = suppressWarnings(as.numeric(Time_Point)))
+plot_data
+
+ggplot(plot_data, aes(x = Time_Point, y = values, color = diff, group = diff)) +
+  geom_line(linewidth = 1) +         # the requested line plot
+  geom_point(size = 2) +             # optional: shows points at each time
+  labs(
+    x = "Time Point",
+    y = "Difference in Mean Log Evenness",
+    color = "Difference Type",
+    title = "Differences in Evenness Over Time"
+  )
+
+```
+
+# Github link
+Here is a link to my Github where this is in the coding_challenge_5 directory
+
+https://github.com/maryfantasia/Scientific_Reproducibility_Class
+
+
